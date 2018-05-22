@@ -27,35 +27,35 @@ $(function() {
         });
 
 
-        /* TODO: Write a test that loops through each feed
+        /* This test loops through each feed
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
         it('have URLs', function() {
-            for(var i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].url).toBeDefined();
-                expect(allFeeds[i].url).toContain('http');
-            }
+            allFeeds.forEach(function(feed) {
+                expect(feed.url).toBeDefined();
+                expect(feed.url).toBeTruthy();
+            });
         });
 
 
-        /* TODO: Write a test that loops through each feed
+        /* This test loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
         it('have names', function() {
             for(var i = 0; i < allFeeds.length; i++) {
                 expect(allFeeds[i].name).toBeDefined();
-                expect(allFeeds[i].name).not.toBe('');
+                expect(allFeeds[i].name.length).not.toBe(0);
             }
         });
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    /* Test suite named "The menu" */
     describe('The menu', function() {
         
-        /* TODO: Write a test that ensures the menu element is
+        /* This test ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
@@ -66,7 +66,7 @@ $(function() {
             })
         });
 
-         /* TODO: Write a test that ensures the menu changes
+         /* This test ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
@@ -84,9 +84,10 @@ $(function() {
           
 
     });
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* Test suite named "Initial Entries" */
     describe('Initial Entries', function() {
-        /* TODO: Write a test that ensures when the loadFeed
+
+        /* This test ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
@@ -99,27 +100,32 @@ $(function() {
          });
 
          it('are loaded when loadFeed function is called', function() {
-            expect($('.feed')[0].childElementCount).toBeGreaterThan(0);
+            expect($('.feed .entry').length).toBeGreaterThan(0);
          });
     });
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    /* Test suite named "New Feed Selection" */
 
-        /* TODO: Write a test that ensures when a new feed is loaded
+        /* This test ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
     describe('New Feed Selection', function() {
         let oldTitle = "";
         let newTitle = "";
+
         beforeEach(function(done) {
-            oldTitle = $('article h2')[0].innerText;
-            loadFeed(1, function() {
-                done();
+            
+            loadFeed(0, function() {
+                oldTitle = $('article h2')[0].innerText;
+                loadFeed(1, function() {
+                    newTitle = $('article h2')[0].innerText;
+                    done();
+                });
+                
             })
         });
 
         it('changes when loadFeed function is called', function() {
-            newTitle = $('article h2')[0].innerText;
             expect(newTitle).not.toBe(oldTitle);
         });
     });
